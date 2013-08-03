@@ -32,7 +32,7 @@ public class VanDerWaalsConstantsCalculator {
 	}
 	
 	private double getVdwConstant(Gas gas, Constant con){
-		int value = 0;
+		double value = 0;
 		int size = gas.getComponents().size();
 		Element[] array = gas.getComponents().toArray(new Element[0]);	
 		for(int i=0;i<size;i++){
@@ -47,7 +47,7 @@ public class VanDerWaalsConstantsCalculator {
 				case B:
 					constValue = elementI.getVdwVolume() * elementJ.getVdwVolume();
 				} 
-				value += Math.sqrt((constValue))*(gas.getPercentage(elementI)/100)*(gas.getPercentage(elementJ)/100);
+				value = value + Math.sqrt((constValue))*(gas.getPercentage(elementI)/100.0)*(gas.getPercentage(elementJ)/100.0);
 			}
 		}
 		
