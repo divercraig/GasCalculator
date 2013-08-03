@@ -47,7 +47,7 @@ public class RealGasLaw extends GasLaw {
 
 	@Override
 	public float getPressureBar(float volumeLitres, float molsOfGas, float temperatureKelvin){
-		return () - ((Math.pow(molsOfGas,2)* getA())/Math.pow(volumeLitres, 2));
+		return 0f;
 	}
 	
 	@Override

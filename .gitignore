@@ -9,6 +9,8 @@
 .classpath
 .project
 .settings/
+.metadata/
+Servers/
 
 # Maven Directories #
 target/
