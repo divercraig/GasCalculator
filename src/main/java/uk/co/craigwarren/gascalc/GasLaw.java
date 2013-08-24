@@ -9,14 +9,14 @@ package uk.co.craigwarren.gascalc;
  */
 public abstract class GasLaw {
 
-	protected static final float gasConstantBarLitres = 0.0821f;
+	protected static final double gasConstantBarLitres = 0.0821f;
 
-	public abstract float getPressureBar(float volumeLitres, float molsOfGas, float temperatureKelvin);
+	public abstract double getPressureBar(double volumeLitres, double molsOfGas, double temperatureKelvin);
 	
-	public abstract float getVolumeLitres(float pressureBar, float molsOfGas, float temperatureKelvin);
+	public abstract double getVolumeLitres(double pressureBar, double molsOfGas, double temperatureKelvin);
 	
-	public abstract float getMolsOfGas(float pressureBar, float volumeLitres, float temperatureKelvin);
+	public abstract double getMolsOfGas(double pressureBar, double volumeLitres, double temperatureKelvin);
 	
-	public abstract float getTemperatureKelvin(float pressureBar, float volumeLitres, float molsOfGas);
+	public abstract double getTemperatureKelvin(double pressureBar, double volumeLitres, double molsOfGas);
 	
 }

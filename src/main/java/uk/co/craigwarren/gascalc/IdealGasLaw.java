@@ -21,22 +21,22 @@ package uk.co.craigwarren.gascalc;
 public class IdealGasLaw extends GasLaw {
 	
 	@Override
-	public float getPressureBar(float volumeLitres, float molsOfGas, float temperatureKelvin){
+	public double getPressureBar(double volumeLitres, double molsOfGas, double temperatureKelvin){
 		return (molsOfGas * gasConstantBarLitres * temperatureKelvin)/volumeLitres;
 	}
 	
 	@Override
-	public float getVolumeLitres(float pressureBar, float molsOfGas, float temperatureKelvin){
+	public double getVolumeLitres(double pressureBar, double molsOfGas, double temperatureKelvin){
 		return (molsOfGas * gasConstantBarLitres * temperatureKelvin)/pressureBar;
 	}
 	
 	@Override
-	public float getMolsOfGas(float pressureBar, float volumeLitres, float temperatureKelvin){
+	public double getMolsOfGas(double pressureBar, double volumeLitres, double temperatureKelvin){
 		return (pressureBar * volumeLitres)/ (gasConstantBarLitres * temperatureKelvin);
 	}
 	
 	@Override
-	public float getTemperatureKelvin(float pressureBar, float volumeLitres, float molsOfGas){
+	public double getTemperatureKelvin(double pressureBar, double volumeLitres, double molsOfGas){
 		return (pressureBar * volumeLitres) / (gasConstantBarLitres * molsOfGas);
 	}
 }

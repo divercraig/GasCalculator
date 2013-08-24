@@ -23,12 +23,18 @@ public class RealGasLaw extends GasLaw {
 	
 	private final Gas gas;
 	private final VanDerWaalsConstantsCalculator calc;
+	private final NewtonRaphson newtonRaphson;
+	private final VanDerWaalsFunctionFactor vdwff;
+	private final IdealGasLaw idealGasLaw;
 	private Double a;
 	private Double b;
 	
-	public RealGasLaw(Gas gas, VanDerWaalsConstantsCalculator calc){
+	public RealGasLaw(Gas gas, VanDerWaalsConstantsCalculator calc, NewtonRaphson nr, VanDerWaalsFunctionFactor vdwff, IdealGasLaw idealGasLaw){
 		this.gas = gas;
 		this.calc = calc;
+		this.newtonRaphson = nr;
+		this.vdwff = vdwff;
+		this.idealGasLaw = idealGasLaw;
 	}
 	
 	private double getA(){
@@ -45,23 +51,44 @@ public class RealGasLaw extends GasLaw {
 		return b;
 	}
 
+	/* (non-Javadoc)
+	 * @see uk.co.craigwarren.gascalc.GasLaw#getPressureBar(double, double, double)
+	 * 
+	 * Use the function
+	 * P = ((nRT)/(v-nb)) - (((n^2)a)/(v^2))
+	 * 
+	 */
 	@Override
-	public float getPressureBar(float volumeLitres, float molsOfGas, float temperatureKelvin){
-		return 0f;
+	public double getPressureBar(double volumeLitres, double molsOfGas, double temperatureKelvin){
+		return ((molsOfGas*gasConstantBarLitres*temperatureKelvin)/(volumeLitres-molsOfGas*getB())) - (((Math.pow(molsOfGas, 2))*getA())/Math.pow(volumeLitres,2));	
 	}
 	
 	@Override
-	public float getVolumeLitres(float pressureBar, float molsOfGas, float temperatureKelvin){
-		return 0f;
+	public double getVolumeLitres(double pressureBar, double molsOfGas, double temperatureKelvin){
+		newtonRaphson.setFunction(vdwff.getVolumeFunction(pressureBar, molsOfGas, getA(), getB(), gasConstantBarLitres, temperatureKelvin));
+		newtonRaphson.setPrimeFunction(vdwff.getVolumePrimeFunction(pressureBar, molsOfGas, getA(), getB()));
+		return newtonRaphson.apply(idealGasLaw.getVolumeLitres(pressureBar, molsOfGas, temperatureKelvin));
 	}
 	
 	@Override
-	public float getMolsOfGas(float pressureBar, float volumeLitres, float temperatureKelvin){
-		return 0f;
+	public double getMolsOfGas(double pressureBar, double volumeLitres, double temperatureKelvin){
+		newtonRaphson.setFunction(vdwff.getMolsFunction(pressureBar, volumeLitres, getA(), getB(), gasConstantBarLitres, temperatureKelvin));
+		newtonRaphson.setPrimeFunction(vdwff.getMolsPrimeFunction(getA(), getB(), volumeLitres, pressureBar, gasConstantBarLitres, temperatureKelvin));
+		return newtonRaphson.apply(idealGasLaw.getMolsOfGas(pressureBar, volumeLitres, temperatureKelvin));
 	}
 	
+	/* (non-Javadoc)
+	 * @see uk.co.craigwarren.gascalc.GasLaw#getTemperatureKelvin(double, double, double)
+	 * 
+	 * T = (((P+((n^2)*a)/(v^2))(V-nb))(V-nb))/nR
+	 * 
+	 */
 	@Override
-	public float getTemperatureKelvin(float pressureBar, float volumeLitres, float molsOfGas){
-		return 0f;
+	public double getTemperatureKelvin(double pressureBar, double volumeLitres, double molsOfGas){
+		double pressureSection = pressureBar + ((Math.pow(molsOfGas, 2)*getA())/Math.pow(volumeLitres, 2));
+		double volumeSection = volumeLitres - (molsOfGas*getB());
+		double molSection = molsOfGas * gasConstantBarLitres;
+		
+		return (pressureSection * volumeSection)/molSection;
 	}
 }
