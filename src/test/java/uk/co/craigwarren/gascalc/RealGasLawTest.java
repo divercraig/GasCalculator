@@ -23,7 +23,7 @@ public class RealGasLawTest extends GasLawTest{
 		Gas testGas = new Gas(21, 79);
 		VanDerWaalsConstantsCalculator testConstCalc = new VanDerWaalsConstantsCalculator();
 		NewtonRaphson testNewtonRaphson = new NewtonRaphson();
-		VanDerWaalsFunctionFactor testVDWFF = new VanDerWaalsFunctionFactor();
+		VanDerWaalsFunctionFactory testVDWFF = new VanDerWaalsFunctionFactory();
 		IdealGasLaw testIdealGasLaws = new IdealGasLaw();
 		gasLawUnderTest = new RealGasLaw(testGas, testConstCalc, testNewtonRaphson, testVDWFF, testIdealGasLaws);
 	}

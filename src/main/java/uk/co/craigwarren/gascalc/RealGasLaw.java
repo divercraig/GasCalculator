@@ -24,12 +24,12 @@ public class RealGasLaw extends GasLaw {
 	private final Gas gas;
 	private final VanDerWaalsConstantsCalculator calc;
 	private final NewtonRaphson newtonRaphson;
-	private final VanDerWaalsFunctionFactor vdwff;
+	private final VanDerWaalsFunctionFactory vdwff;
 	private final IdealGasLaw idealGasLaw;
 	private Double a;
 	private Double b;
 	
-	public RealGasLaw(Gas gas, VanDerWaalsConstantsCalculator calc, NewtonRaphson nr, VanDerWaalsFunctionFactor vdwff, IdealGasLaw idealGasLaw){
+	public RealGasLaw(Gas gas, VanDerWaalsConstantsCalculator calc, NewtonRaphson nr, VanDerWaalsFunctionFactory vdwff, IdealGasLaw idealGasLaw){
 		this.gas = gas;
 		this.calc = calc;
 		this.newtonRaphson = nr;

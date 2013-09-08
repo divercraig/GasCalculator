@@ -62,6 +62,10 @@ public class Gas {
 		return 0;
 	}
 	
+	public double getDecimalRatio(Element element){
+		return 0.01 * getPercentage(element);
+	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		if(!(obj instanceof Gas)){
@@ -84,5 +88,8 @@ public class Gas {
 	}
 	
 	
+	public static Gas air(){
+		return new Gas(21,79);
+	}
 
 }

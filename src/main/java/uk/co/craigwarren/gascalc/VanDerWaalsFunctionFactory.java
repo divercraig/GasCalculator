@@ -11,7 +11,7 @@ import com.google.common.base.Function;
  * @author craig
  *
  */
-public class VanDerWaalsFunctionFactor {
+public class VanDerWaalsFunctionFactory {
 	
 	public Function<Double,Double> getVolumeFunction(final double pressure, final double mols, final double a, final double b, final double r, final double temp){
 
