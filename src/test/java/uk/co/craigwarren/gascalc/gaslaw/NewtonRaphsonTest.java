@@ -1,9 +1,11 @@
-package uk.co.craigwarren.gascalc;
+package uk.co.craigwarren.gascalc.gaslaw;
 
 import org.junit.Assert;
 
 import org.easymock.EasyMock;
 import org.junit.Test;
+
+import uk.co.craigwarren.gascalc.gaslaw.NewtonRaphson;
 
 import com.google.common.base.Function;
 

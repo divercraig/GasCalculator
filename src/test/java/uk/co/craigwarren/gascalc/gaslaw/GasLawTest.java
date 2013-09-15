@@ -1,10 +1,12 @@
 /**
  * 
  */
-package uk.co.craigwarren.gascalc;
+package uk.co.craigwarren.gascalc.gaslaw;
 
 import org.junit.Assert;
 import org.junit.Test;
+
+import uk.co.craigwarren.gascalc.gaslaw.GasLaw;
 
 /**
  * @author craig
@@ -14,7 +16,7 @@ public abstract class GasLawTest {
 	private double testTemp = 293;
 	private double testVolume = 10;
 	private double testPressure = 200;
-	private double testQuantity = 83.14176;
+	private double testQuantity = 83.182286;
 	
 	public double getTestTemp() {
 		return testTemp;

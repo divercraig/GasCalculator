@@ -1,10 +1,13 @@
 /**
  * 
  */
-package uk.co.craigwarren.gascalc;
+package uk.co.craigwarren.gascalc.gaslaw;
 
 import org.junit.Test;
 import org.junit.Assert;
+
+import uk.co.craigwarren.gascalc.model.Element;
+import uk.co.craigwarren.gascalc.model.Gas;
 
 /**
  * @author craig

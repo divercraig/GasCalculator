@@ -1,7 +1,7 @@
 /**
  * 
  */
-package uk.co.craigwarren.gascalc;
+package uk.co.craigwarren.gascalc.model;
 
 /**
  * An enum representing an element which is identified by it's name but also contains 
@@ -11,9 +11,9 @@ package uk.co.craigwarren.gascalc;
  *
  */
 public enum Element {
-	OXYGEN(1.382,0.03186,31.9988),
-	NITROGEN(1.370,0.03870,28.01348),
-	HELIUM(0.0346,0.02380,4.0020602);
+	OXYGEN(1.378,0.03183,31.9988),
+	NITROGEN(1.408,0.03913,28.01348),
+	HELIUM(0.03457,0.0237,4.0020602);
 	
 	private double vdwElasticity;
 	private double vdwVolume;

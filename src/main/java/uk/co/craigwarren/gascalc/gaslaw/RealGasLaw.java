@@ -1,7 +1,9 @@
 /**
  * 
  */
-package uk.co.craigwarren.gascalc;
+package uk.co.craigwarren.gascalc.gaslaw;
+
+import uk.co.craigwarren.gascalc.model.Gas;
 
 /**
  * Class which can perform the real gas calculations for Bar and Litres using the formulae
@@ -21,13 +23,22 @@ package uk.co.craigwarren.gascalc;
  */
 public class RealGasLaw extends GasLaw {
 	
-	private final Gas gas;
+	private Gas gas;
+
 	private final VanDerWaalsConstantsCalculator calc;
 	private final NewtonRaphson newtonRaphson;
 	private final VanDerWaalsFunctionFactory vdwff;
 	private final IdealGasLaw idealGasLaw;
 	private Double a;
 	private Double b;
+	
+	public Gas getGas() {
+		return gas;
+	}
+	
+	public void setGas(Gas gas) {
+		this.gas = gas;
+	}
 	
 	public RealGasLaw(Gas gas, VanDerWaalsConstantsCalculator calc, NewtonRaphson nr, VanDerWaalsFunctionFactory vdwff, IdealGasLaw idealGasLaw){
 		this.gas = gas;

@@ -1,9 +1,16 @@
 /**
  * 
  */
-package uk.co.craigwarren.gascalc;
+package uk.co.craigwarren.gascalc.gaslaw;
 
 import org.junit.Before;
+
+import uk.co.craigwarren.gascalc.gaslaw.IdealGasLaw;
+import uk.co.craigwarren.gascalc.gaslaw.NewtonRaphson;
+import uk.co.craigwarren.gascalc.gaslaw.RealGasLaw;
+import uk.co.craigwarren.gascalc.gaslaw.VanDerWaalsConstantsCalculator;
+import uk.co.craigwarren.gascalc.gaslaw.VanDerWaalsFunctionFactory;
+import uk.co.craigwarren.gascalc.model.Gas;
 
 /**
  * @author craig
@@ -15,7 +22,7 @@ public class RealGasLawTest extends GasLawTest{
 	
 	@Override
 	public double getTestQuantity() {
-		return 85.04;
+		return 85.40888;
 	}
 
 	@Before

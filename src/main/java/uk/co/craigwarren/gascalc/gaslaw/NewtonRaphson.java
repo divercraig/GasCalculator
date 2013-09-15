@@ -1,7 +1,7 @@
 /**
  * 
  */
-package uk.co.craigwarren.gascalc;
+package uk.co.craigwarren.gascalc.gaslaw;
 
 import com.google.common.base.Function;
 

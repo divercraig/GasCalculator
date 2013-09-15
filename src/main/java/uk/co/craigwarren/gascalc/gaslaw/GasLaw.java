@@ -1,7 +1,7 @@
 /**
  * 
  */
-package uk.co.craigwarren.gascalc;
+package uk.co.craigwarren.gascalc.gaslaw;
 
 /**
  * @author craig
@@ -9,7 +9,7 @@ package uk.co.craigwarren.gascalc;
  */
 public abstract class GasLaw {
 
-	protected static final double gasConstantBarLitres = 0.0821f;
+	protected static final double gasConstantBarLitres = 0.08206f;
 
 	public abstract double getPressureBar(double volumeLitres, double molsOfGas, double temperatureKelvin);
 	

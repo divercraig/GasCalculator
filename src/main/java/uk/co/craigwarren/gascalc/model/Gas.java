@@ -1,7 +1,7 @@
 /**
  * 
  */
-package uk.co.craigwarren.gascalc;
+package uk.co.craigwarren.gascalc.model;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,24 +14,24 @@ import java.util.Set;
  */
 public class Gas {
 	
-	private Map<Element, Integer> components;
+	private Map<Element, Double> components;
 	
-	public int getPercentageOxygen() {
+	public double getPercentageOxygen() {
 		return this.getPercentage(Element.OXYGEN);
 	}
-	public int getPercentageNitrogen() {
+	public double getPercentageNitrogen() {
 		return this.getPercentage(Element.NITROGEN);
 	}
-	public int getPercentageHelium() {
+	public double getPercentageHelium() {
 		return this.getPercentage(Element.HELIUM);
 	}
 	
-	public Gas(int oxygen, int nitrogen, int helium){
+	public Gas(double oxygen, double nitrogen, double helium){
 		if(oxygen + nitrogen + helium != 100 ) {
 			throw new IllegalArgumentException("Cannot create a gas when components do not sum to 100");
 		}
 		
-		components = new HashMap<Element,Integer>();
+		components = new HashMap<Element,Double>();
 		
 		if(oxygen != 0){
 			components.put(Element.OXYGEN, oxygen);
@@ -46,16 +46,23 @@ public class Gas {
 		}
 	}
 	
-	public Gas(int oxygen, int nitrogen)
-	{
+	public Gas(double oxygen, double nitrogen){
 		this(oxygen,nitrogen,0);
+	}
+	
+	public Gas(int oxygen, int nitrogen){
+		this((double)oxygen,(double)nitrogen);
+	}
+	
+	public Gas(int oxygen, int nitrogen, int helium){
+		this((double)oxygen,(double)nitrogen,(double)helium);
 	}
 	
 	public Set<Element> getComponents(){
 		return this.components.keySet();
 	}
 	
-	public int getPercentage(Element element){
+	public double getPercentage(Element element){
 		if(components.containsKey(element)){
 			return components.get(element);
 		}
@@ -82,7 +89,7 @@ public class Gas {
 	
 	@Override
 	public String toString() {
-		return String.format("(%d O2) (%d N2) (%d He)",
+		return String.format("(%f O2) (%f N2) (%f He)",
 				this.getPercentageOxygen(), this.getPercentageNitrogen(),
 				this.getPercentageHelium());
 	}

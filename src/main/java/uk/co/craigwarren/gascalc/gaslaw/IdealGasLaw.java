@@ -1,7 +1,7 @@
 /**
  * 
  */
-package uk.co.craigwarren.gascalc;
+package uk.co.craigwarren.gascalc.gaslaw;
 
 /**
  * Class which can perform the ideal gas calculations for Bar and Litres using the formulae

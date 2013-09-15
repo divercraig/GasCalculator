@@ -1,7 +1,10 @@
 /**
  * 
  */
-package uk.co.craigwarren.gascalc;
+package uk.co.craigwarren.gascalc.gaslaw;
+
+import uk.co.craigwarren.gascalc.model.Element;
+import uk.co.craigwarren.gascalc.model.Gas;
 
 
 /**

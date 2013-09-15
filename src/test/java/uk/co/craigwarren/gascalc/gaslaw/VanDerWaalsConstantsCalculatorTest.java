@@ -1,9 +1,12 @@
 /**
  * 
  */
-package uk.co.craigwarren.gascalc;
+package uk.co.craigwarren.gascalc.gaslaw;
 
 import org.junit.Test;
+
+import uk.co.craigwarren.gascalc.gaslaw.VanDerWaalsConstantsCalculator;
+import uk.co.craigwarren.gascalc.model.Gas;
 import static org.junit.Assert.*;
 
 /**
@@ -12,7 +15,7 @@ import static org.junit.Assert.*;
  */
 public class VanDerWaalsConstantsCalculatorTest {
 	
-	private static final double EXPECTED_ELASTICITY = 1.3725;
+	private static final double EXPECTED_ELASTICITY = 1.4016;
 	private static final double EXPECTED_VOLUME = 0.0372;
 
 	@Test

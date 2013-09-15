@@ -1,9 +1,11 @@
 /**
  * 
  */
-package uk.co.craigwarren.gascalc;
+package uk.co.craigwarren.gascalc.gaslaw;
 
 import org.junit.Before;
+
+import uk.co.craigwarren.gascalc.gaslaw.IdealGasLaw;
 
 /**
  * @author craig
