@@ -3,6 +3,8 @@
  */
 package uk.co.craigwarren.gascalc.gaslaw;
 
+import uk.co.craigwarren.gascalc.model.Gas;
+
 /**
  * Class which can perform the ideal gas calculations for Bar and Litres using the formulae
  * 
@@ -38,5 +40,10 @@ public class IdealGasLaw extends GasLaw {
 	@Override
 	public double getTemperatureKelvin(double pressureBar, double volumeLitres, double molsOfGas){
 		return (pressureBar * volumeLitres) / (gasConstantBarLitres * molsOfGas);
+	}
+
+	@Override
+	public void setGas(Gas gas) {
+		//Do Nothing
 	}
 }

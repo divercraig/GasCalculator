@@ -3,6 +3,8 @@
  */
 package uk.co.craigwarren.gascalc.gaslaw;
 
+import uk.co.craigwarren.gascalc.model.Gas;
+
 /**
  * @author craig
  *
@@ -19,4 +21,5 @@ public abstract class GasLaw {
 	
 	public abstract double getTemperatureKelvin(double pressureBar, double volumeLitres, double molsOfGas);
 	
+	public abstract void setGas(Gas gas);
 }
