@@ -4,25 +4,27 @@
 package uk.co.craigwarren.gascalc;
 
 /**
+ * Unit Converter Static Methods
+ * 
  * @author craig
  *
  */
 public class UnitConverter {
 	
-	public float celciusToKelvin(float degreesCelcius){
+	public static float celciusToKelvin(float degreesCelcius){
 		return degreesCelcius + 273;
 	}
 	
-	public float kelvinToCelcius(float degreesKelvin){
+	public static float kelvinToCelcius(float degreesKelvin){
 		return degreesKelvin - 273;
 	}
 	
-	public int celciusToKelvin(int degreesCelcius){
-		return Math.round(this.celciusToKelvin((float)degreesCelcius));
+	public static int celciusToKelvin(int degreesCelcius){
+		return Math.round(celciusToKelvin((float)degreesCelcius));
 	}
 	
-	public int kelvinToCelcius(int degreesKelvin){
-		return Math.round(this.kelvinToCelcius((float)degreesKelvin));
+	public static int kelvinToCelcius(int degreesKelvin){
+		return Math.round(kelvinToCelcius((float)degreesKelvin));
 	}
 
 }
