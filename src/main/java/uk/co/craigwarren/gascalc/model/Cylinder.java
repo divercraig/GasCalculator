@@ -26,14 +26,18 @@ public class Cylinder {
 		this.gas = gas;
 	}
 	
-	public Cylinder(double volume, double pressure, Gas gas) {
+	public Cylinder(double volume, double pressure, Gas gas, double tempKelvin) {
+	    if(tempKelvin == 0.0) {
+	        throw new IllegalArgumentException("Cannot mix gas at absolute zero");
+	    }
 		this.volume = volume;
 		this.pressure = pressure;
 		this.gas = gas;
+		this.ambientTemperatureKelvin = tempKelvin;
 	}
 	
 	public Cylinder(double volume, double pressure) {
-		this(volume, pressure, Gas.air());
+		this(volume, pressure, Gas.air(), 20.0);
 	}
 	
 	public Cylinder(double volume) {
