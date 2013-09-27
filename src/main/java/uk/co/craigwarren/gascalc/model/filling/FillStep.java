@@ -22,14 +22,23 @@ public class FillStep {
 		this.gas = gas;
 	}
 
+	/**
+	 * @return the action to be carried out
+	 */
 	public FillAction getAction() {
 		return action;
 	}
 
+	/**
+	 * @return the new pressure Reading after the step
+	 */
 	public double getPressure() {
 		return pressure;
 	}
 
+	/**
+	 * @return the gas to be used in the step
+	 */
 	public Gas getGas() {
 		return gas;
 	}
