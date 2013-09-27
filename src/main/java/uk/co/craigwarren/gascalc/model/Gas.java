@@ -3,9 +3,11 @@
  */
 package uk.co.craigwarren.gascalc.model;
 
-import java.util.HashMap;
+import java.util.EnumSet;
 import java.util.Map;
 import java.util.Set;
+
+import com.google.common.collect.Maps;
 
 
 /**
@@ -26,12 +28,29 @@ public class Gas {
 		return this.getPercentage(Element.HELIUM);
 	}
 	
+	/**
+     * Constructor which takes a map of all the element in the gas and the amount of them
+     * @param amountByElement the amount of each gas separated by element (this will be normalised to sum to 100)
+     */
+    public Gas(Map<Element,Double> amountByElement) {
+        EnumSet<Element> validElements = EnumSet.of(Element.HELIUM,Element.NITROGEN,Element.OXYGEN);
+        double totalAmount = getTotalAmount(amountByElement);
+        components = Maps.newEnumMap(Element.class);
+        for (Element element : amountByElement.keySet()) {
+            if(!validElements.contains(element)) {
+                throw new IllegalArgumentException("Cannot create a gas with elements other than O2, N2 or He");
+            }
+            double percentage = (amountByElement.get(element)/totalAmount) * 100.0;
+            components.put(element, percentage);
+        }
+    }
+	
 	public Gas(double oxygen, double nitrogen, double helium){
 		if(oxygen + nitrogen + helium != 100 ) {
 			throw new IllegalArgumentException("Cannot create a gas when components do not sum to 100");
 		}
 		
-		components = new HashMap<Element,Double>();
+		components = Maps.newEnumMap(Element.class);
 		
 		if(oxygen != 0){
 			components.put(Element.OXYGEN, oxygen);
@@ -57,6 +76,18 @@ public class Gas {
 	public Gas(int oxygen, int nitrogen, int helium){
 		this((double)oxygen,(double)nitrogen,(double)helium);
 	}
+	
+	/**
+     * @param molsByElement the collection of mols separated by element
+     * @return the sum of all amounts
+     */
+    private double getTotalAmount(Map<Element,Double> amountByElement) {
+        double sum = 0.0;
+        for (Double amount : amountByElement.values()) {
+            sum = sum + amount;
+        }
+        return sum;
+    }
 	
 	public Set<Element> getComponents(){
 		return this.components.keySet();
