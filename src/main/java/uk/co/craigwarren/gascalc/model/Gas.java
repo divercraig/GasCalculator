@@ -15,6 +15,8 @@ import com.google.common.collect.Maps;
  *
  */
 public class Gas {
+    
+    private static EnumSet<Element> validElements = EnumSet.of(Element.HELIUM,Element.NITROGEN,Element.OXYGEN);
 	
 	private Map<Element, Double> components;
 	
@@ -28,18 +30,34 @@ public class Gas {
 		return this.getPercentage(Element.HELIUM);
 	}
 	
+	private void checkForValidElement(Element element) {
+	    if(!validElements.contains(element)) {
+            throw new IllegalArgumentException("Cannot create a gas with elements other than O2, N2 or He");
+        }
+	}
+	
+	
+	/**
+	 * Constructor which is made up of a single element
+	 * 
+	 * @param element the element that makes up the gas
+	 */
+	public Gas(Element element) {
+	    checkForValidElement(element);
+	    components = Maps.newEnumMap(Element.class);
+	    components.put(element, 100.0);
+	    
+	}
+	
 	/**
      * Constructor which takes a map of all the element in the gas and the amount of them
      * @param amountByElement the amount of each gas separated by element (this will be normalised to sum to 100)
      */
     public Gas(Map<Element,Double> amountByElement) {
-        EnumSet<Element> validElements = EnumSet.of(Element.HELIUM,Element.NITROGEN,Element.OXYGEN);
         double totalAmount = getTotalAmount(amountByElement);
         components = Maps.newEnumMap(Element.class);
         for (Element element : amountByElement.keySet()) {
-            if(!validElements.contains(element)) {
-                throw new IllegalArgumentException("Cannot create a gas with elements other than O2, N2 or He");
-            }
+            checkForValidElement(element);
             double percentage = (amountByElement.get(element)/totalAmount) * 100.0;
             components.put(element, percentage);
         }
