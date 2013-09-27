@@ -5,6 +5,7 @@ public class Cylinder {
 	private double volume;
 	private double pressure;
 	private Gas gas;
+	private double ambientTemperatureKelvin;
 	
 	public double getVolume() {
 		return volume;
@@ -38,10 +39,11 @@ public class Cylinder {
 	public Cylinder(double volume) {
 		this(volume, 0);
 	}
-	
-	
-	
-	
-	
+    public double getAmbientTemperatureKelvin() {
+        return ambientTemperatureKelvin;
+    }
+    public void setAmbientTemperatureKelvin(double ambientTemperatureKelvin) {
+        this.ambientTemperatureKelvin = ambientTemperatureKelvin;
+    }
 
 }

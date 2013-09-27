@@ -15,14 +15,13 @@ public class FillRequirement {
 	private Cylinder startingCylinder;
 	private double targetPressure;
 	private Gas targetGas;
-	private double ambientTemperatureKelvin;
 	
-	public FillRequirement(Cylinder startingCylinder, double targetPressure, Gas targetGas, int ambientTemperatureKelvin) {
+	
+	public FillRequirement(Cylinder startingCylinder, double targetPressure, Gas targetGas) {
 		super();
 		this.startingCylinder = startingCylinder;
 		this.targetPressure = targetPressure;
 		this.targetGas = targetGas;
-		this.ambientTemperatureKelvin = ambientTemperatureKelvin;
 	}
 
 	public Cylinder getStartingCylinder() {
@@ -47,14 +46,6 @@ public class FillRequirement {
 
 	public void setTargetGas(Gas targetGas) {
 		this.targetGas = targetGas;
-	}
-	
-	public void setAmbientTemperatureKelvin(int kelvin) {
-	    this.ambientTemperatureKelvin = kelvin;
-	}
-	
-	public double getAmbientTemperatureKelvin() {
-	    return this.ambientTemperatureKelvin;
 	}
 	
 	
