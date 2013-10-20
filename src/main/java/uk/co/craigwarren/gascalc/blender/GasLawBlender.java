@@ -3,6 +3,7 @@
  */
 package uk.co.craigwarren.gascalc.blender;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 import com.google.common.collect.Maps;
@@ -39,19 +40,19 @@ public class GasLawBlender implements GasBlender {
         Map<Element,Double> availableMolsByElement = getAvailableMolsByElement(requirement.getStartingCylinder());
         Map<Element,Double> requiredMolsByElement = 
                 subtractMolsByElement(targetMolByElement, availableMolsByElement);
-        
+        FillPlan plan = new FillPlan();
         FillStep drain = getDrainAction(requirement, requiredMolsByElement, availableMolsByElement, targetMolByElement);
         if(null != drain) {
             //OK so we need to drain the cylinder first and then generate a plan based on the new starting pressure
             requirement.getStartingCylinder().setPressure(drain.getPressure());
-            FillPlan plan = blendGas(requirement);
+            targetMolByElement = getTargetMolsByElement(requirement);
+            availableMolsByElement = getAvailableMolsByElement(requirement.getStartingCylinder());
+            requiredMolsByElement = subtractMolsByElement(targetMolByElement, availableMolsByElement);
             plan.addFirst(drain);
-            return plan;
         }
         
         requiredMolsByElement = removeOxygenFromAir(requiredMolsByElement, requirement.getTargetGas());
-        
-        FillPlan plan = new FillPlan();
+
         Cylinder cylinder = requirement.getStartingCylinder();
         
         if(requiredMolsByElement.containsKey(Element.HELIUM) && requiredMolsByElement.get(Element.HELIUM) > 0.0){
@@ -84,7 +85,8 @@ public class GasLawBlender implements GasBlender {
         Gas newGas = new Gas(molsByElement);
         gasLaw.setGas(newGas);
         double newPressure = gasLaw.getPressureBar(cylinder.getVolume(), getTotalAmount(molsByElement), cylinder.getAmbientTemperatureKelvin());
-        FillStep step = new FillStep(FillAction.FILL, newPressure, new Gas(element));
+        BigDecimal decimal = new BigDecimal(newPressure).setScale(1, BigDecimal.ROUND_DOWN);
+        FillStep step = new FillStep(FillAction.FILL, decimal.doubleValue(), new Gas(element));
         cylinder.setGas(newGas);
         cylinder.setPressure(newPressure);
         
@@ -121,55 +123,39 @@ public class GasLawBlender implements GasBlender {
     }
     
     private FillStep getDrainAction(FillRequirement requirement, Map<Element,Double> requiredMolsByElement, Map<Element,Double> availableMolsByElement, Map<Element,Double> targetMolsByElement) {
-        //TODO: Work out how to do more effitient draining
-                
-        Map<Element,Double> negativeMols = Maps.newEnumMap(Element.class);
-        double molsOfFreeOxygen = 0.0;
         
-        if(targetMolsByElement.containsKey(Element.NITROGEN)) {
-            molsOfFreeOxygen = getMolsOfOxygenFromAir(targetMolsByElement.get(Element.NITROGEN));
-
+    	double startAirTopupMols = getMolsBeforeAirTopup(requirement.getStartingCylinder().getGas(), requirement.getTargetGas(), getTargetMols(requirement));
+        double availableMols = getAvailableMols(requirement.getStartingCylinder());
+    	
+        double requiredHelium = 0.0;
+        double availableHelium = 0.0;
+        if(availableMolsByElement.containsKey(Element.HELIUM)) {
+        	availableHelium = availableMolsByElement.get(Element.HELIUM);
+        	if(requiredMolsByElement.containsKey(Element.HELIUM)){
+        		requiredHelium = requiredMolsByElement.get(Element.HELIUM);
+        	}
         }
+        double heliumDiff = requiredHelium - availableHelium;
         
-        for (Element element : requiredMolsByElement.keySet()) {
-            double molsRequired = requiredMolsByElement.get(element);
-            if(element == Element.OXYGEN) {
-                molsRequired = molsRequired - molsOfFreeOxygen;
-            }
-            if(molsRequired < 0.0) {
-                negativeMols.put(element, molsRequired);
-            }
-        }
-        
-        if(negativeMols.isEmpty()) {
+        if(heliumDiff >= 0.0 && startAirTopupMols > (availableMols+heliumDiff)) {
+        	//No need to drain as we have
             return null;
         }
-        /*
-        double maxReductionRatio = 0.0;
-        Element maxReductionElement = Element.NITROGEN;
         
-        for (Element element : negativeMols.keySet()) {
-            double amountToReduce = Math.abs(negativeMols.get(element));
-            double amountAvailable = availableMolsByElement.get(element);
-            double ratio = amountToReduce/amountAvailable;
-            if (ratio > maxReductionRatio) {
-                maxReductionRatio = ratio;
-                maxReductionElement = element;
-            }
+        double heliumMolDrain = 0.0;
+        if(heliumDiff<0.0) {
+        	heliumMolDrain = Math.abs(heliumDiff)/requirement.getStartingCylinder().getGas().getDecimalRatio(Element.HELIUM);
         }
+        double molsAfterHeliumDrain = availableMols - heliumMolDrain;
         
-        double newAvailableMols = 0.0;
-        for (Element element : availableMolsByElement.keySet()) {
-            double availableMols = availableMolsByElement.get(element); 
-            double elementRatio = requirement.getStartingCylinder().getGas().getDecimalRatio(element) / requirement.getStartingCylinder().getGas().getDecimalRatio(maxReductionElement);
-            double newMols = availableMols - (availableMols * maxReductionRatio * elementRatio);
-            newAvailableMols = newAvailableMols + newMols;
-        }
-        
+        double molsDrainTo = Math.min(molsAfterHeliumDrain, startAirTopupMols);
         gasLaw.setGas(requirement.getStartingCylinder().getGas());
-        double reducedPressure = gasLaw.getPressureBar(requirement.getStartingCylinder().getVolume(), newAvailableMols, requirement.getStartingCylinder().getAmbientTemperatureKelvin());
-        */    
-        return new FillStep(FillAction.DRAIN, 0.0, requirement.getStartingCylinder().getGas());
+        double barDrainTo = gasLaw.getPressureBar(
+        		requirement.getStartingCylinder().getVolume(),
+        		molsDrainTo, requirement.getStartingCylinder().getAmbientTemperatureKelvin());
+        BigDecimal decimal = new BigDecimal(barDrainTo).setScale(1, BigDecimal.ROUND_DOWN);
+        
+        return new FillStep(FillAction.DRAIN, decimal.doubleValue(), requirement.getStartingCylinder().getGas());
         
     }
     
@@ -232,7 +218,7 @@ public class GasLawBlender implements GasBlender {
         return result;
     }
     
-private void checkForImpossibleMix(Gas gas, Map<Element, Double> targetMolsByElement) throws ImpossibleMixException {
+    private void checkForImpossibleMix(Gas gas, Map<Element, Double> targetMolsByElement) throws ImpossibleMixException {
         if( targetMolsByElement.containsKey(Element.NITROGEN)) {
             double nitrogenMolsRequired = targetMolsByElement.get(Element.NITROGEN);
             double oxygenMolsFree = getMolsOfOxygenFromAir(nitrogenMolsRequired);
@@ -247,5 +233,31 @@ private void checkForImpossibleMix(Gas gas, Map<Element, Double> targetMolsByEle
             }
             
         }
+    }
+    
+    /**
+     * 
+     * Work out the mols of a starting gas which can be mixed with Air  to
+	 * result in a specific number of mols of a target gas.
+	 * 
+	 * Ao(Tm - X) + (Go*X) = To * Tm
+	 * 
+	 * where
+	 * Ao = the decimal value of O2 in air
+	 * Go = the decimal value of O2 in the initial gas
+	 * Tm = the target mols of the target gas
+	 * To = the decimal value of O2 in the target gas
+	 * 
+	 * X = the number of mols of the initial gas that when mixed will result the correct
+	 * mix of the target gas
+	 */
+    private double getMolsBeforeAirTopup(Gas start, Gas target, double targetMols) {
+    	Element oxygen = Element.OXYGEN;
+    	double part1 = target.getDecimalRatio(oxygen)*targetMols;
+		double part2 = Gas.air().getDecimalRatio(oxygen)* targetMols;
+		double part3 = start.getDecimalRatio(oxygen) - Gas.air().getDecimalRatio(oxygen);
+		
+		double answer = (part1 - part2) / part3;
+		return answer;
     }
 }
