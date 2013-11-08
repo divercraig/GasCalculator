@@ -6,8 +6,6 @@
 *.ear
 
 # Eclipse Files and Directories #
-.classpath
-.project
 .settings/
 .metadata/
 Servers/
