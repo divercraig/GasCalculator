@@ -82,5 +82,21 @@ public class GasLawBlenderIntTest {
         Assert.assertEquals("The third step pressure is incorrect",230.0, step2.getPressure(),0.01);
 
     }
+    
+    @Test
+    public void testRemoveHelium() throws ImpossibleMixException {
+    	GasBlender blender = new GasLawBlender(new IdealGasLaw());
+    	FillRequirement requirement = new FillRequirement(new Cylinder(12.0,200.0,new Gas(40,20,40),UnitConverter.celciusToKelvin(20)),230.0, Gas.air());
+    	FillPlan plan = blender.blendGas(requirement);
+    	Assert.assertEquals("There should be two steps in the plan",2,plan.size());
+    	FillStep step1 = plan.get(0);
+    	 Assert.assertEquals("The first step should be a Drain",FillAction.DRAIN,step1.getAction());
+         Assert.assertEquals("The First step pressure is incorrect", 0.0, step1.getPressure(),0.01);
+            
+         FillStep step2 = plan.get(1);
+         Assert.assertEquals("The third step should be a fill",FillAction.FILL,step2.getAction());
+         Assert.assertEquals("The third action should use Air", Gas.air(),step2.getGas());
+         Assert.assertEquals("The third step pressure is incorrect",230.0, step2.getPressure(),0.01);
+    }
 
 }

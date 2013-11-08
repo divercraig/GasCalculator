@@ -111,7 +111,7 @@ public class GasLawBlender implements GasBlender {
             if(molsByElement.containsKey(Element.OXYGEN)) {
                 double oxygenMols = molsByElement.get(Element.OXYGEN);
                 oxygenMols = oxygenMols - freeOxygen;
-                if(oxygenMols < 0.0) {
+                if(oxygenMols < -0.0000001) {
                     throw new ImpossibleMixException(targetGas);
                 }
                 molsByElement.put(Element.OXYGEN, oxygenMols);
@@ -135,7 +135,7 @@ public class GasLawBlender implements GasBlender {
         		requiredHelium = requiredMolsByElement.get(Element.HELIUM);
         	}
         }
-        double heliumDiff = requiredHelium - availableHelium;
+        double heliumDiff = availableHelium + requiredHelium;
         
         if(heliumDiff >= 0.0 && startAirTopupMols > (availableMols+heliumDiff)) {
         	//No need to drain as we have
@@ -228,7 +228,7 @@ public class GasLawBlender implements GasBlender {
                 oxygenMolsRequired = targetMolsByElement.get(Element.OXYGEN);
             }
             
-            if(oxygenMolsRequired < oxygenMolsFree){
+            if((oxygenMolsFree - oxygenMolsRequired ) >= 0.0000001){
                 throw new ImpossibleMixException(gas);
             }
             
